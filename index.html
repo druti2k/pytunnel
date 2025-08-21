@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyTunnel - Secure Local Development Tunnels</title>
+    <meta name="description" content="PyTunnel creates secure tunnels to expose your local development servers to the internet. Perfect for demos, testing, and sharing local apps.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .hero-section h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .hero-section p {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .feature-card p {
+            color: #7f8c8d;
+        }
+
+        .code-section {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+            overflow-x: auto;
+        }
+
+        .code-section h3 {
+            margin-bottom: 20px;
+            color: #3498db;
+        }
+
+        .code-block {
+            background: #34495e;
+            padding: 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+        }
+
+        .step-list {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+        }
+
+        .step-list li {
+            margin-left: 30px;
+        }
+
+
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            padding: 30px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🚀 PyTunnel</h1>
+            <p>Secure tunnels for local development servers</p>
+        </header>
+
+        <main class="main-content">
+            <section class="hero-section">
+                <h2>Expose Your Local Apps to the World</h2>
+                <p>PyTunnel creates secure, encrypted tunnels to your local development servers. Perfect for demos, testing, and sharing your work with clients and team members.</p>
+                <a href="#get-started" class="cta-button">Get Started Now</a>
+            </section>
+
+            <section class="features-grid">
+                <div class="feature-card">
+                    <h3>🔒 Secure by Default</h3>
+                    <p>All tunnels use SSL/TLS encryption. Your data is protected from end-to-end with automatic certificate management.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚡ Lightning Fast</h3>
+                    <p>Built with WebSocket technology for optimal performance. Minimal latency and maximum reliability.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🌐 Global Access</h3>
+                    <p>Access your local apps from anywhere in the world. Works on any device with internet access.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🛠️ Developer Friendly</h3>
+                    <p>Simple CLI interface, Docker support, and comprehensive documentation. Get up and running in minutes.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📱 Cross-Platform</h3>
+                    <p>Works on Windows, macOS, and Linux. Consistent experience across all operating systems.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🚀 Production Ready</h3>
+                    <p>Built with scalability in mind. Docker support, monitoring, and enterprise-grade features.</p>
+                </div>
+            </section>
+
+            <section id="get-started">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #2c3e50;">Quick Start Guide</h2>
+                
+                <div class="code-section">
+                    <h3>1. Install PyTunnel</h3>
+                    <div class="code-block">
+pip install pytunnel
+                    </div>
+                </div>
+
+                <div class="code-section">
+                    <h3>2. Start Your Local Server</h3>
+                    <div class="code-block">
+# Start any local server (example with Python)
+python -m http.server 3000
+
+# Or with Node.js
+npm start
+
+# Or with any other framework
+                    </div>
+                </div>
+
+                <div class="code-section">
+                    <h3>3. Create a Tunnel</h3>
+                    <div class="code-block">
+# Create tunnel to your local server
+pytunnel tunnel --port 3000 --server-host pytunnel.yourdomain.com
+
+# You'll get a public URL like:
+# https://abc123.yourdomain.com
+                    </div>
+                </div>
+
+                <div class="code-section">
+                    <h3>4. Share Your URL</h3>
+                    <div class="code-block">
+# Send the generated URL to anyone
+# They can access your local app from anywhere!
+                    </div>
+                </div>
+            </section>
+
+
+
+            <section style="text-align: center; margin: 50px 0;">
+                <h2 style="color: #2c3e50; margin-bottom: 20px;">Ready to Get Started?</h2>
+                <p style="color: #7f8c8d; margin-bottom: 30px;">Join thousands of developers who trust PyTunnel for their local development needs.</p>
+                <a href="#get-started" class="cta-button">Start Using PyTunnel</a>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 PyTunnel. Built with ❤️ for developers.</p>
+            <p style="margin-top: 10px;">
+                <a href="https://github.com/druti2k/pytunnel" style="color: white; text-decoration: none;">GitHub</a> | 
+                <a href="#" style="color: white; text-decoration: none;">Documentation</a> | 
+                <a href="#" style="color: white; text-decoration: none;">Support</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate feature cards on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            document.querySelectorAll('.feature-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
