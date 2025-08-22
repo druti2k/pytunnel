@@ -187,8 +187,11 @@ async def http_handler(request):
 
 async def health_handler(request):
     """Health check endpoint for Render"""
+    logger.info(f"Health check requested from {request.remote}")
+    response_text = f"OK\nPyTunnel Server Running\nPort: {os.getenv('PORT', '8081')}\nActive Tunnels: {len(tunnel_manager.tunnels)}\nTimestamp: {time.time()}"
+    logger.info(f"Health check response: {response_text}")
     return web.Response(
-        text=f"OK\nPyTunnel Server Running\nPort: {os.getenv('PORT', '8081')}\nActive Tunnels: {len(tunnel_manager.tunnels)}",
+        text=response_text,
         content_type='text/plain',
         status=200
     )
@@ -234,10 +237,12 @@ async def main():
     # Create web application
     app = web.Application()
     
-    # Add routes
-    app.router.add_get('/ws', websocket_handler)
+    # Add routes - order matters!
     app.router.add_get('/health', health_handler)
-    app.router.add_route('*', '/{path:.*}', http_handler)
+    app.router.add_get('/test', lambda r: web.Response(text="Test endpoint working!", content_type='text/plain'))
+    app.router.add_get('/ws', websocket_handler)
+    app.router.add_get('/', http_handler)  # Root path
+    app.router.add_route('*', '/{path:.*}', http_handler)  # Catch-all for tunnels
     
     # Start cleanup task
     asyncio.create_task(cleanup_old_tunnels())
