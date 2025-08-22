@@ -222,6 +222,11 @@ def signal_handler(signum, frame):
 
 async def main():
     """Main application entry point"""
+    logger.info("=== PyTunnel Server Starting ===")
+    logger.info(f"Python version: {sys.version}")
+    logger.info(f"Environment PORT: {os.getenv('PORT', 'not set')}")
+    logger.info(f"Environment LOG_LEVEL: {os.getenv('LOG_LEVEL', 'INFO')}")
+    
     # Set up signal handlers
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
@@ -245,17 +250,24 @@ async def main():
     
     logger.info(f"Starting PyTunnel server on port {port}")
     logger.info(f"Max connections: {MAX_CONNECTIONS}")
-    logger.info(f"WebSocket endpoint: ws://localhost:{port}/ws")
-    logger.info(f"Health check: http://localhost:{port}/health")
+    logger.info(f"WebSocket endpoint: ws://0.0.0.0:{port}/ws")
+    logger.info(f"Health check: http://0.0.0.0:{port}/health")
     
     # Start server
-    runner = web.AppRunner(app)
-    await runner.setup()
-    
-    site = web.TCPSite(runner, '0.0.0.0', port)
-    await site.start()
-    
-    logger.info(f"PyTunnel server is running on port {port}")
+    try:
+        runner = web.AppRunner(app)
+        await runner.setup()
+        
+        site = web.TCPSite(runner, '0.0.0.0', port)
+        await site.start()
+        
+        logger.info(f"PyTunnel server is running on port {port}")
+        logger.info(f"Server bound to 0.0.0.0:{port}")
+        logger.info(f"Health check available at: http://0.0.0.0:{port}/health")
+        
+    except Exception as e:
+        logger.error(f"Failed to start server: {e}")
+        raise
     
     # Keep server running
     try:
