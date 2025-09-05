@@ -16,6 +16,8 @@ def create_db():
     conn.commit()
     conn.close()
 
+
+
 def add_token(token):
     """Add a token to the database (if not already present)."""
     conn = sqlite3.connect(DB_PATH)
