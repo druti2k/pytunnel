@@ -3,23 +3,13 @@ services:
     name: pytunnel-server
     env: python
     plan: free
-    buildCommand: pip install -r requirements_render.txt
-    startCommand: python server_minimal.py
+    buildCommand: pip install -r requirements_builtin.txt
+    startCommand: python server_builtin.py
     envVars:
       - key: PYTHON_VERSION
         value: 3.11
-      - key: USE_SSL
-        value: false
-      - key: PUBLIC_HOST
-        value: pytunnel-server.onrender.com
       - key: LOG_LEVEL
         value: INFO
-      - key: MAX_CONNECTIONS
-        value: 100
-      - key: HEARTBEAT_INTERVAL
-        value: 30
-      - key: CONNECTION_TIMEOUT
-        value: 300
     healthCheckPath: /health
     autoDeploy: true
     region: oregon
