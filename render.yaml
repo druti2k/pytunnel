@@ -3,13 +3,13 @@ services:
     name: pytunnel-server
     env: python
     plan: free
-    buildCommand: pip install -r requirements_builtin.txt
-    startCommand: python server_builtin.py
+    buildCommand: pip install -r requirements_flask_simple.txt
+    startCommand: python server_flask_simple.py
     envVars:
       - key: PYTHON_VERSION
         value: 3.11
-      - key: LOG_LEVEL
-        value: INFO
+      - key: FLASK_ENV
+        value: production
     healthCheckPath: /health
     autoDeploy: true
     region: oregon
