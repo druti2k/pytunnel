@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: pytunnel-server
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements_render.txt
+    startCommand: python start.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
+      - key: LOG_LEVEL
+        value: INFO
+    healthCheckPath: /health
+    autoDeploy: true
+    region: oregon
+
