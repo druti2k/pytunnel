@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-PyTunnel Server - Render.com Optimized Version
-Simplified for Render's free tier with WebSocket support
+Simple PyTunnel Server for Render.com
+Minimal implementation focused on reliability
 """
 
 import asyncio
@@ -13,7 +13,6 @@ from aiohttp import web, WSMsgType
 from aiohttp.web import WebSocketResponse
 import json
 import time
-from urllib.parse import urlparse
 
 # Configure logging
 logging.basicConfig(
@@ -26,8 +25,6 @@ logger = logging.getLogger(__name__)
 tunnels = {}
 tunnel_counter = 0
 MAX_CONNECTIONS = int(os.getenv('MAX_CONNECTIONS', 100))
-HEARTBEAT_INTERVAL = int(os.getenv('HEARTBEAT_INTERVAL', 30))
-CONNECTION_TIMEOUT = int(os.getenv('CONNECTION_TIMEOUT', 300))
 
 class TunnelManager:
     def __init__(self):
@@ -196,34 +193,25 @@ async def health_handler(request):
         status=200
     )
 
-async def cleanup_old_tunnels():
-    """Clean up inactive tunnels"""
-    while True:
-        try:
-            current_time = time.time()
-            to_remove = []
-            
-            for tunnel_id, tunnel in tunnel_manager.tunnels.items():
-                if current_time - tunnel['last_activity'] > CONNECTION_TIMEOUT:
-                    to_remove.append(tunnel_id)
-                    
-            for tunnel_id in to_remove:
-                tunnel_manager.remove_tunnel(tunnel_id)
-                
-            if to_remove:
-                logger.info(f"Cleaned up {len(to_remove)} inactive tunnels")
-                
-        except Exception as e:
-            logger.error(f"Cleanup error: {e}")
-            
-        await asyncio.sleep(60)  # Run every minute
-
 def signal_handler(signum, frame):
     """Handle shutdown signals"""
     logger.info("Shutting down PyTunnel server...")
     sys.exit(0)
 
-async def main():
+def create_app():
+    """Create and configure the web application"""
+    app = web.Application()
+    
+    # Add routes
+    app.router.add_get('/health', health_handler)
+    app.router.add_get('/test', lambda r: web.Response(text="Test endpoint working!", content_type='text/plain'))
+    app.router.add_get('/ws', websocket_handler)
+    app.router.add_get('/', http_handler)  # Root path
+    app.router.add_route('*', '/{path:.*}', http_handler)  # Catch-all for tunnels
+    
+    return app
+
+def main():
     """Main application entry point"""
     logger.info("=== PyTunnel Server Starting ===")
     logger.info(f"Python version: {sys.version}")
@@ -233,19 +221,6 @@ async def main():
     # Set up signal handlers
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
-    
-    # Create web application
-    app = web.Application()
-    
-    # Add routes - order matters!
-    app.router.add_get('/health', health_handler)
-    app.router.add_get('/test', lambda r: web.Response(text="Test endpoint working!", content_type='text/plain'))
-    app.router.add_get('/ws', websocket_handler)
-    app.router.add_get('/', http_handler)  # Root path
-    app.router.add_route('*', '/{path:.*}', http_handler)  # Catch-all for tunnels
-    
-    # Start cleanup task
-    asyncio.create_task(cleanup_old_tunnels())
     
     # Get port from environment (Render sets PORT)
     port = int(os.getenv('PORT', 8081))
@@ -258,34 +233,19 @@ async def main():
     logger.info(f"WebSocket endpoint: ws://0.0.0.0:{port}/ws")
     logger.info(f"Health check: http://0.0.0.0:{port}/health")
     
+    # Create app
+    app = create_app()
+    
     # Start server
     try:
-        runner = web.AppRunner(app)
-        await runner.setup()
-        
-        site = web.TCPSite(runner, '0.0.0.0', port)
-        await site.start()
-        
-        logger.info(f"PyTunnel server is running on port {port}")
-        logger.info(f"Server bound to 0.0.0.0:{port}")
-        logger.info(f"Health check available at: http://0.0.0.0:{port}/health")
-        
-        # Keep server running
-        try:
-            await asyncio.Future()  # Run forever
-        except KeyboardInterrupt:
-            logger.info("Received keyboard interrupt")
-        finally:
-            logger.info("Shutting down server...")
-            await runner.cleanup()
-            
+        web.run_app(app, host='0.0.0.0', port=port)
     except Exception as e:
         logger.error(f"Failed to start server: {e}")
         raise
 
 if __name__ == '__main__':
     try:
-        asyncio.run(main())
+        main()
     except KeyboardInterrupt:
         logger.info("Server stopped by user")
     except Exception as e:

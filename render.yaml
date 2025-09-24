@@ -4,7 +4,7 @@ services:
     env: python
     plan: free
     buildCommand: pip install -r requirements_render.txt
-    startCommand: python server_render.py
+    startCommand: python server_simple.py
     envVars:
       - key: PYTHON_VERSION
         value: 3.11
