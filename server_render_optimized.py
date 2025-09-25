@@ -173,6 +173,16 @@ async def health_handler(request):
         status=200
     )
 
+# Create app globally so it can be imported
+app = web.Application()
+
+# Add routes
+app.router.add_get('/health', health_handler)
+app.router.add_get('/test', lambda r: web.Response(text="Test endpoint working!", content_type='text/plain'))
+app.router.add_get('/ws', websocket_handler)
+app.router.add_get('/', http_handler)
+app.router.add_route('*', '/{path:.*}', http_handler)
+
 def main():
     """Main application entry point"""
     logger.info("=== PyTunnel Server Starting ===")
@@ -182,16 +192,6 @@ def main():
     port = int(os.getenv('PORT', 8081))
     logger.info(f"Using port: {port}")
     logger.info(f"Environment PORT: {os.getenv('PORT', 'not set')}")
-    
-    # Create app
-    app = web.Application()
-    
-    # Add routes
-    app.router.add_get('/health', health_handler)
-    app.router.add_get('/test', lambda r: web.Response(text="Test endpoint working!", content_type='text/plain'))
-    app.router.add_get('/ws', websocket_handler)
-    app.router.add_get('/', http_handler)
-    app.router.add_route('*', '/{path:.*}', http_handler)
     
     logger.info(f"Starting PyTunnel server on port {port}")
     logger.info(f"Max connections: {MAX_CONNECTIONS}")
