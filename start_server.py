@@ -17,6 +17,7 @@ def main():
         'your_application:wsgi_application',
         '--bind', f'0.0.0.0:{port}',
         '--workers', '1',
+        '--worker-class', 'aiohttp.GunicornWebWorker',
         '--timeout', '120'
     ]
     
