@@ -1,2 +1,3 @@
 aiohttp>=3.8.0
 aiohttp-wsgi>=0.8.2
+gunicorn>=20.1.0
