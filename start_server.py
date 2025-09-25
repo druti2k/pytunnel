@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Startup script for Render - handles the $ issue
+Startup script for Render - uses uvicorn for better aiohttp support
 """
 
 import os
@@ -8,26 +8,25 @@ import sys
 import subprocess
 
 def main():
-    """Start the server using Gunicorn"""
+    """Start the server using uvicorn"""
     port = os.getenv('PORT', '10000')
     
-    # Build the gunicorn command
+    # Build the uvicorn command
     cmd = [
-        'gunicorn',
-        'your_application:wsgi_application',
-        '--bind', f'0.0.0.0:{port}',
-        '--workers', '1',
-        '--worker-class', 'aiohttp.GunicornWebWorker',
-        '--timeout', '120'
+        'uvicorn',
+        'server_render_optimized:app',
+        '--host', '0.0.0.0',
+        '--port', port,
+        '--workers', '1'
     ]
     
     print(f"Starting server with command: {' '.join(cmd)}")
     
-    # Run gunicorn
+    # Run uvicorn
     try:
         subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as e:
-        print(f"Gunicorn failed: {e}")
+        print(f"Uvicorn failed: {e}")
         sys.exit(1)
     except KeyboardInterrupt:
         print("Server stopped by user")
