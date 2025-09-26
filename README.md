@@ -196,3 +196,23 @@ python pytunnel.py server --help
 6. **Monitoring & metrics** - Health checks and analytics
 7. **Production deployment** - Cloud infrastructure setup
 
+---
+
+## 👨‍💻 Credits
+
+### **Created by:**
+[@druti2k](https://github.com/druti2k)
+
+### **Inspired by:**
+[Localtunnel](https://localtunnel.me/) - Created by [@defunctzombie](https://github.com/defunctzombie)
+
+### **Support this project:**
+- ⭐ **Star the repository** on [GitHub](https://github.com/druti2k/pytunnel)
+- 🐛 **Report issues** and suggest features
+- 🔧 **Contribute** to the codebase
+- 📢 **Share** with other developers
+
+---
+
+**PyTunnel** - *View the project on [GitHub](https://github.com/druti2k/pytunnel)*
+
