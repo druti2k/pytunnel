@@ -203,9 +203,6 @@ python pytunnel.py server --help
 ### **Created by:**
 [@druti2k](https://github.com/druti2k)
 
-### **Inspired by:**
-[Localtunnel](https://localtunnel.me/) - Created by [@defunctzombie](https://github.com/defunctzombie)
-
 ### **Support this project:**
 - ⭐ **Star the repository** on [GitHub](https://github.com/druti2k/pytunnel)
 - 🐛 **Report issues** and suggest features
